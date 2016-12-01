@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html ng-app="linkApp">
+    <head>
+        <style type="text/css">
+            .form-horizontal {
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 100px;
+                width: 500px;
+                
+            } 
+         .navbar-nav > li > a > i {
+             border-bottom: 1px solid black;
+            }
+
+        </style>
+        <meta charset="utf-8">
+               <!--
+        <meta http-equiv="refresh" content="30">
+-->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'  type='text/css'>
+        <link href="css/font-awesome.min.css">
+  
+        
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> 
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-animate.js"></script>
+        
+            
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+
+        <!-- Angular Material Library -->
+        <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+        <script src="//cloud.apizee.com/apiRTC/apiRTC-latest.min.js"></script>
+        
+        <script src="js/app.js"></script>
+        <script src="js/controller.js"></script>
+      
+        <script type="text/javascript" src="js/script.js"></script>
+        
+    
+    </head>
+    <body ng-controller="loginCtrl">
+        <title>{{title}}</title>
+        <nav class="nav navbar-default" id="navLogin">
+            <div class="container-fluid">
+               <div>
+                    <div style="top : 0;" class="col-md-4">
+                        <small class="text-primary">Powered by Dian & SAWARE &copy;  2016</small>&nbsp;&nbsp;
+                        <a href="#"><i class="icon-facebook text-primary"></i></a>&nbsp;
+                        <a href="#"><i class="icon-twitter text-primary"></i></a>&nbsp;
+                        <a href="#"><i class="icon-linkedin text-primary"></i></a>
+                   </div>
+                </div>
+            </div>
+        </nav>
+        <div id="login">
+        <form class="form-horizontal" role="form" name="LoginForm" ng-submit="formSubmit(LoginForm.$valid)" id="formLogin">
+            <h3 class="text-primary">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Connexion</h3>
+            <span ng-show="LoginFormInvalid" class="text-danger"><small>Nom d'utilisateur ou mot de passe invalide</small></span>
+            <div class="form-group col-md-8" ng-class= "{'has-error' : LoginForm.email.$invalid && !Login.email.$pristine }">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="icon-user text-primary"></i></span>
+                    <input class="form-control" type="email" name="email" placeholder="Login" ng-model="credentials.email" required>
+                </div>
+                 <span ng-show="LoginForm.email.$invalid && !Login.email.$pristine">Email invalide</span>
+            </div>
+            <div class="form-group col-md-8" ng-class= "{'has-error' : LoginForm.password.$invalid && !Login.password.$pristine }">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="icon-lock text-primary" ></i></span>
+                    <input class="form-control" type="password" name="password" placeholder="Mot de passe" ng-model="credentials.password" required> 
+                </div>
+                <span ng-show="LoginForm.password.$invalid && !LoginForm.password.$pristine">Mot de passe invalide</span>
+            </div>
+            <div class="form-group col-md-8">
+               <button class="btn btn-primary btn-block" type="submit" ng-disabled="LoginForm.$invalid"><span class="text-default">Se connecter</span></button>
+            </div>
+        </form>
+            </div>
+        <ui-view></ui-view>
+    </body>
+</html>

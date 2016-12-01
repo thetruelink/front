@@ -1,0 +1,54 @@
+
+       <style>
+           .form-input-contact {
+               margin-bottom: 10px;
+           }
+     
+       </style>
+
+<div class="panel panel-success" style="margin-top : 50px;">
+   <div class="panel-heading">
+      <h4><i class="icon-user">&nbsp;</i>New Contact</h4>
+    </div>
+  <div class="panel-body" ng-controller="newContactCtrl" >
+       <form class="form-horizontal" method="post" ng-submit =" saveContact()">
+           <div ng-show="exist" class="alert alert-danger">
+               Cet email existe déjà
+           </div>
+           <div ng-show="registrerOk" class="alert alert-success">Successful</div>
+           <div class="form-group row">                    
+               <div class="col-xs-6 form-input-contact" style="margin-left:-12px;">
+                   <input type="text" class="form-control" placeholder="Nom de famille *" ng-model = "contact.nom"  required>
+               </div>
+               <div class="col-xs-6 form-input-contact">
+                   <input type="text" class="form-control" placeholder="Prénom *" ng-model = "contact.prenom">
+               </div>
+           </div>
+           <div class="form-group row">
+               <input type="email" class="form-control" placeholder="Adresse électronique *" ng-model = "contact.email"> 
+           </div>
+           <div class="form-group row">
+             <input type="text" class="form-control" placeholder="Titre du poste" ng-model = "contact.titre">
+           
+           </div>
+           <div class="form-group row">
+             <input type="text" class="form-control" placeholder="Localisation" ng-model = "contact.localisation">
+           
+           </div>
+           <div class="form-group row">
+               <select ng-model = "contact.role">
+                   <option  selected>Utilisateur</option>
+                   <option >Administrateur</option>
+                  
+               </select>
+           </div>
+            <div class="form-group row">
+        
+                <button type="submit" class="btn btn-info pull-right">Terminer</button>
+                                
+           
+           </div>
+           </div>  
+    </div>
+</form>
+    

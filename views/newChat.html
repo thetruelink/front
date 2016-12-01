@@ -1,0 +1,133 @@
+<style type="text/css">
+    li {
+        list-style: none;
+    }  
+    .left, .rigth {
+        border-radius: 5px;
+        font-size: 0.8em;
+    }
+    
+  #tableChat th, #tableChat td, #tableChat tr { 
+     border: none !important; 
+ }
+    tr{
+        margin-bottom: 0;
+    }
+    tbody {
+        height: 100px;
+        overflow-y: auto;
+    }
+    .date {
+        text-decoration:underline;
+    }
+  .h-divider{
+    margin-top:5px;
+    margin-bottom:5px;
+    height:0.1em;
+    width:100%;
+    border-top:0.1em;
+}
+    .table-no-border{
+        border: none ! important;
+    }
+    .hiddenCompenent {
+        visibility: hidden;
+    }
+    .visibleCompenent {
+        visibility: visible;
+    }
+      p{
+        display: inline-block;
+        word-break:normal;
+        min-width:1px;
+        max-width:200px;
+        padding: 4px;
+    }
+    #msgBox{
+        overflow-y: auto;
+        overflow-x: hidden;
+        min-height: 140px;
+        max-height: 200px;
+        display: block;
+    }
+</style>
+<div ng-controller="contactCtrl" drag-directive style="z-index : 10;">
+    <table class="table " cellspacing="0" id="tableChat">
+       <thead id="thead" style="border: 1px solid #dddddd;">
+          <th>
+              <div class="row">
+                      <a href="#" class="col-md-1" style="text-decoration : none;" title="Ajouter d'autres participants à la discussion"><i class="icon-group"></i></a>
+              </div>
+              
+              <div class="row">
+                  <div class="col-md-7 col-md-offset-4">
+                    <img src="img/boss.jpg" class="img-circle" height="35px">&nbsp;
+                      <small class="text-default">{{contact.prenom}}&nbsp;{{contact.nom}}</small>
+                  </div>
+              </div>
+              <div class="h-divider bg-primary"></div>
+              <div class="row">
+                  <a href="#" class="col-md-1 col-md-offset-3" style="margin-right:10px;" title="Démarrer un appel vidéo">
+                      <i class="icon-facetime-video icon-2x text-primary"></i></a>
+                  <a href="#" class="col-md-1" title="Démarrer un appel audio">
+                      <i class="icon-phone icon-2x text-primary"></i></a>
+                  <a href="#" class="col-md-1" title="Démarrer un partage d'écran">
+                     <i class="icon-desktop icon-2x"></i>
+                  </a>
+                  <div class="col-md-3 pull-right">
+                      <a href="#" id="chevron-down" chevron-down-directive title="Réduire la discussion"><i class="icon-chevron-down text-primary"></i></a>
+                      <a href="#" ng-click="setAttributeShow (contact, false)" title="Fermer la discussion"><i class="icon-remove text-primary"></i></a>
+                  </div>
+              </div>
+           </th>
+        </thead>
+        <tbody id="msgBox"  style="background-color : #b2dfdb  ;" received-message-directive>
+            <tr style="border-width: 0;">
+                <td class="text-center col-md-offset-4 col-md-2">Hier</td>
+            </tr>
+            <tr ng-repeat  = "m in messages">
+                <td ng-if="m.user.id !== contact.id">
+                     <div style="margin-left:0px;">
+                         <left-directive message="{{m.texte}}" time="{{m.date.timestamp | date : 'hh:mm '}}"></left-directive>
+                     </div>
+                </td>
+                <td ng-if =" m.user.id == contact.id">
+                   <div style="margin-left : 10px;">
+                      <right-directive message="{{m.texte}}" time="{{m.date.timestamp | date : 'hh:mm '}}"></right-directive>
+                    
+                    </div>
+                
+                </td>
+                 
+            
+            
+            </tr>
+        </tbody>
+        <tfoot id="tfoot" style="background-color : #b2dfdb;">
+            <tr>
+                <td><textarea id="{{contact.id}}" class="form-control" cols="5" rows="2" text-directive placeholder="Tapez votre message ici"></textarea></td         
+            </tr>
+            <tr>
+                <td>
+                 <label class="btn btn-file text-primary"><i class="icon-file"></i> <input type="file" style="display: none;" title="Envoyer un fichier"></label>&nbsp;
+                    <a href="#" title="Partager votre position"><i class="icon-map-marker text-primary"></i></a>
+                </td>       
+           </tr>
+        </tfoot>
+    </table>
+    <footer style="display : none;">
+       <div class="row" >
+        <div style= "bottom : 0; position : fixed;" class="col-md-3">
+             <div>
+                 <p>
+                 <small class="text-danger">Une discussion en attente.</small>
+                 </p>
+                     <a href="#" chevron-up-directive style="text-decoration : none;">
+                    <small class="text-primary">{{contact.prenom}}&nbsp;{{contact.nom}} </small>&nbsp;&nbsp;<i class="icon-chevron-up"></i></a>
+                
+             </div>
+        </div>
+    </div>
+    </footer>
+</div>
+  

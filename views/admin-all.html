@@ -1,0 +1,49 @@
+<div class="row">
+<div class="col-md-6" style="margin-left : 10px; margin-top:50px">
+    <div ng-conroller="adminCtrl"> 
+    <i class="fa fa-spinner fa-pulse fa-3x fa-fw" ng-show="allContacts.length==0"></i>
+     <div class="panel panel-danger">
+         <div class="panel-heading"><h4><i class="icon-wrench"></i> &nbsp;trueLink administration</h4></div>
+         <div class="panel-body">
+             <form class="navbar-form navbar-right right-inner-addon col-xs-2" role="search">
+                    <i class="icon-search" style="margin-left : 10px;"></i>
+                    <input type="text" class="form-control input-sm" placeholder="Rechercher un contact" ng-model ="searchText">
+             </form>
+             <a ui-sref="newContact" title="Ajouter un nouveau contact"><i class="icon-plus-sign-alt"></i></a>
+             <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                   <thead>
+                     <th>Prénom et Nom</th>
+                     <th>Etat</th>
+                    </thead>
+                    <tbody>
+                       <tr ng-repeat = "user in allContacts ">
+                          <td><a ui-sref="contact({id: $index})" ng-click="setContact(user)"  style="text-decoration : none;" over-directive>{{user.prenom}}&nbsp;{{user.nom}}</a>
+                           </td>
+                           <td ng-switch = "user.state">
+                               <i class="icon-ok-sign text-success" ng-switch-when = "activated"></i>
+                               <i class="icon-ok-sign text-danger" ng-switch-when = "disabled"></i>
+                           </td>
+                        </tr>
+                    </tbody>
+                 
+                 </table>
+             </div>
+         </div>
+    </div>
+    
+    </div>
+    </div>
+    <div class="col-md-5" ng-controller="contactCtrl">
+      <div ui-view></div>
+    </div>
+
+</div>
+
+<script>
+     $(document).ready( function(){
+         $('#login').css({'display' : 'none'});
+         
+     })
+
+</script>
