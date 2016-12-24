@@ -1,10 +1,10 @@
-var BASE_URL = 'http://192.168.2.3:81/worldLink/web/app.php';
+var BASE_URL = 'http://192.168.1.23:81/api/web/app.php';
 var session = '';
 app.controller('appCtrl', function(){
     
 });
 
-app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, removeFavoryFactory, StatusFactory, Favorites, Data, User, DestId, sendMessageFactory, conversation, $rootScope){
+app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, removeFavoryFactory, StatusFactory, Favorites, Data, User, DestId, sendMessageFactory, conversation, $rootScope, messagesRecov){
     
     $scope.user =   User.getUser();
     $scope.user.status = 'Disponible';
@@ -17,7 +17,7 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
         type : 'POST',
         data : {
             apiId :apiCC.session.apiCCId,
-            id    :  $scope.user.id
+            email    :  $scope.user.email
         },
         url : BASE_URL+ '/changeApiId'
     }).done( function(data){
@@ -26,16 +26,16 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
         //console.error( err);
     });
     
-    Contacts.then( function ( data){
+    Contacts.then(function ( data){
         $scope.allContacts = data.data;
     });
-    
+    /*
     setInterval( function(){
             Contacts.then( function ( data){
             $scope.allContacts = data.data;
     });
     }, 15000);
-    
+    */
     //Initialisation des views
     var tabTemplateC = []; $scope.tabTemplate = [];
      Contacts.then( function ( data){
@@ -77,12 +77,13 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
         $.ajax({
             type : 'POST',
             data : {
-                id:  contact.id
+                email:  contact.email
             },
             url :  BASE_URL+ '/getApiId'
         }).done( function (data) {
-            DestId.setDestinationId (data);
+            DestId.setDestinationId(data);
             DestId.setContactId(contact.id);
+            DestId.setContactEmail(contact.email);
         } ).fail( function (err) {
             
            // console.log( err);
@@ -92,15 +93,15 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
             method : 'POST',
             url : BASE_URL+'/getMessages',
             data : {
-                s : $rootScope.currentUser.id,
-                d : contact.id
+                s_email : $rootScope.currentUser.email,
+                d_email : contact.email
             }
             
-        }).then ( function ( data){
+        }).then (function (data){
                 $scope.template= 'views/newChat.html#chatBoxId';
                 $scope.setAttributeShow( contact, true);
                 conversation.setConversation(contact);
-                messagesRecov.setMessage ( data.data);
+                messagesRecov.setMessage(data.data);
         }, function (err){});
          
     }
@@ -120,11 +121,11 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
         return conversations.findConversation(index).statut;  
     }
    $scope.favorites = [];
-    /*
-    Favorites.getFavorites($rootScope.currentUser.id).then( function( data){
+    
+    Favorites.getFavorites($rootScope.currentUser.email).then(function( data){
         $scope.favorites = data.data;
     });
-    */
+    
     /*
     setTimeout( function(){
         Favorites.then( function(data){ 
@@ -147,20 +148,26 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
     
     $scope.addToFavorites = function(contact){
         if( $scope.checkFavory(contact) == 0){
-            $scope.favorites.push(contact); 
-            addContactFactory.add(contact);        
+            addContactFactory.add(contact)
+                .then(function(data){
+                     if(data.data = 'ok'){
+                         $scope.favorites.push(contact); 
+                     }
+            });        
         }
     }
     /*Suppression d'un contact des favoris*/
     
     $scope.deleteToFavorites = function(favory){
-        $scope.favorites.splice($scope.favorites.indexOf(favory), 1);
-         removeFavoryFactory.remove(favory);
+         removeFavoryFactory.remove(favory)
+             .then(function(data){
+               if(data.data == 'ok'){
+                   $scope.favorites.splice($scope.favorites.indexOf(favory), 1);
+               }
+         });
     }
-    
-    
 });
-app.controller('contactCtrl', function($scope, conversation, messagesRecov, Contact, $state , updateContact, rmContact, Data, $http){  
+app.controller('contactCtrl', function($scope, conversation, messagesRecov, Contact, $state , updateContact, rmContact, Data, $http, $rootScope){  
     $scope.contact = conversation.getConversation();
     $scope.messages = messagesRecov.getMessage();
     $scope.contactInAdmin  = Contact.getContact();

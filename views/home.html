@@ -61,7 +61,7 @@
             }
             */
 </style>
-    <div  ng-controller="homeCtrl">
+    <div>
         <script>$('title').html('Home'); </script>
        <nav class="navbar navbar-default">
            <div class="container-fluid">
@@ -79,7 +79,9 @@
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><img class="img-circle" src="{{avatar}}" height="45px" alt="{{user.prenom[0]}}{{user.nom[0]}}">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <img class="img-circle" 
+                                     src="{{avatar}}" height="45px" alt="{{user.prenom[0]}}{{user.nom[0]}}">
                                 <span class="text-primary" ng-model ="nom"> {{user.prenom}}&nbsp;{{user.nom}}</span>
                                 <span class="caret primary"></span></a>
                             <ul class="dropdown-menu">
@@ -123,7 +125,8 @@
                               <i class="icon-minus-sign  text-danger" ng-switch-when="Occupé(e)"></i>  
                               <i class="icon-time  text-muted" ng-switch-when="Sorti(e)"></i>  
                               <i class="icon-repeat  text-warning" ng-switch-when="En réunion"></i> &nbsp;    
-                                {{contact.prenom}}&nbsp;{{contact.nom}}&nbsp;
+                                <span style="">{{contact.prenom}}</span>&nbsp;
+                                <span style="font-weight : bold">{{contact.nom}}</span>&nbsp;
                              </a>
                            <a href="#" title="Ajouter aux favoris" ng-click = "addToFavorites(contact)"><i class="icon-expand-alt"></i></a>
                               <table class="table text-danger" style="display : none;">
@@ -172,7 +175,8 @@
                             <a href="#" title="Retirer des favoris" ng-click ="deleteToFavorites(favory)">
                                 <small><i class="icon-check-minus"></i></small></a></td>
                             <td><small>Date</small></td>
-                          <td><small><a href="#" title="Commencer une discussion" ng-click ="loadConversation(favory)"><i class="icon-comment"></i></a></small></td>
+                          <td><small><a href="#" title="Commencer une discussion" 
+                                        ng-click ="loadConversation(favory)"><i class="icon-comment"></i></a></small></td>
                         </tr>
                     </tbody>
                 </table>

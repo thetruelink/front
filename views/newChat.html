@@ -86,21 +86,18 @@
                 <td class="text-center col-md-offset-4 col-md-2">Hier</td>
             </tr>
             <tr ng-repeat  = "m in messages">
-                <td ng-if="m.user.id !== contact.id">
+                <td ng-if="m.user.email == contact.email">
                      <div style="margin-left:0px;">
                          <left-directive message="{{m.texte}}" time="{{m.date.timestamp | date : 'hh:mm '}}"></left-directive>
                      </div>
                 </td>
-                <td ng-if =" m.user.id == contact.id">
+                <td ng-if ="m.user.email !== contact.email">
                    <div style="margin-left : 10px;">
                       <right-directive message="{{m.texte}}" time="{{m.date.timestamp | date : 'hh:mm '}}"></right-directive>
                     
                     </div>
                 
                 </td>
-                 
-            
-            
             </tr>
         </tbody>
         <tfoot id="tfoot" style="background-color : #b2dfdb;">

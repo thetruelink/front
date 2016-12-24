@@ -1,5 +1,5 @@
 'use strict';
-var BASE_URL = 'http://192.168.2.3:81/worldLink/web/app.php';
+var BASE_URL = 'http://192.168.1.23:81/api/web/app.php';
 
 var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngMaterial'])
 .config( function ($stateProvider, $urlRouterProvider, $mdThemingProvider){
@@ -58,8 +58,8 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
 })
 .factory ('Favorites', function( $http) {
     return {
-        getFavorites : function(id){
-            return  $http({ method : 'POST',url : BASE_URL+  '/listeContact', data : { id : id}});
+        getFavorites : function(email){
+            return $http.post(BASE_URL+  '/listeContact', {email: email});
         }
     } 
 })
@@ -70,29 +70,14 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
 .factory('addContactFactory', function( $http, $rootScope){
     return {
         add : function(contact){
-            $http({
-                method : 'POST',
-                url : BASE_URL+'/addContact',
-                data : {
-                    userId : 1,
-                    destId : 2
-                }
-            });  
+           return $http.post(BASE_URL+'/addContact', { userId : $rootScope.currentUser.id, destId : contact.id});
         }
     }
 })
-.factory ('removeFavoryFactory', function($http){
-    
+.factory ('removeFavoryFactory', function($http, $rootScope){
      return {
         remove : function(contact){
-            $http({
-                method : 'POST',
-                url : BASE_URL+'/removeContact',
-                data : {
-                    userId : $rootScope.currentUser.id,
-                    destId : contact.id
-                }
-            })   
+            return $http.post(BASE_URL+'/removeContact', {userId : $rootScope.currentUser.id, destId : contact.id});   
         }
     }
 })
@@ -117,8 +102,8 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
                 method : 'POST',
                 url : BASE_URL+'/sendMessage',
                 data : {
-                    d : dest,
-                    s : src,
+                    d_email : dest,
+                    s_email : src,
                     m : msg
                 }
             })   
@@ -278,7 +263,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
     }
 })
 .factory ('DestId', function (){
- var destId = '', id = '';
+ var destId = '', id = '', email = '';
     return {
         setDestinationId : function(d){
             destId = d;
@@ -291,6 +276,12 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
         },
         getContactId : function(){
             return id;
+        },
+         setContactEmail : function(e){
+            email = e;
+        },
+        getContactEmail : function(){
+            return email;
         }
         
     }
@@ -338,7 +329,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
                     var message = element.val();
                     if( message.trim() != ''){
                         sendIMessage(DestId.getDestinationId() , $rootScope.currentUser.id, message);
-                        sendMessageFactory.send(DestId.getContactId(),$rootScope.currentUser.id,message);
+                        sendMessageFactory.send(DestId.getContactEmail(),$rootScope.currentUser.email,message);
                          element.parent().parent().parent().siblings('tbody').append('<tr>'+
                         '<td>'+
                         '<div class="" style="margin-left:0px;">'+
