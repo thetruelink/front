@@ -150,7 +150,7 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
         if( $scope.checkFavory(contact) == 0){
             addContactFactory.add(contact)
                 .then(function(data){
-                     if(data.data = 'ok'){
+                     if(data.data == 'ok'){
                          $scope.favorites.push(contact); 
                      }
             });        
