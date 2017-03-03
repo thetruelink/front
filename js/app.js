@@ -1,12 +1,13 @@
 'use strict';
-var BASE_URL = 'http://192.168.1.23:81/api/web/app.php';
+//var BASE_URL = 'http://localhost:81/api/web/app.php';
+var BASE_URL = 'http://localhost:8000';
 
 var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngMaterial'])
 .config( function ($stateProvider, $urlRouterProvider, $mdThemingProvider){
   $mdThemingProvider.theme('default')
       .primaryPalette('blue')
       .accentPalette('red');
-    
+
     $stateProvider.state('home', {
         url : '/home',
         controller : 'homeCtrl',
@@ -42,7 +43,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
     $urlRouterProvider.when('/logout', 'logout');
 })
 .factory('conversation', function(){
-     
+
     var contactConversation = {};
     return {
         setConversation : function(contact){
@@ -61,7 +62,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
         getFavorites : function(email){
             return $http.post(BASE_URL+  '/listeContact', {email: email});
         }
-    } 
+    }
 })
 .factory('ContactsAdmin', function($http){
     return $http.get(BASE_URL+ '/allContactsAdmin');
@@ -77,7 +78,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
 .factory ('removeFavoryFactory', function($http, $rootScope){
      return {
         remove : function(contact){
-            return $http.post(BASE_URL+'/removeContact', {userId : $rootScope.currentUser.id, destId : contact.id});   
+            return $http.post(BASE_URL+'/removeContact', {userId : $rootScope.currentUser.id, destId : contact.id});
         }
     }
 })
@@ -91,8 +92,8 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
                     email : email,
                     status : status
                 }
-            })   
-        }   
+            })
+        }
     }
 })
 .factory('sendMessageFactory', function($http){
@@ -106,8 +107,8 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
                     s_email : src,
                     m : msg
                 }
-            })   
-        }   
+            })
+        }
     }
 })
 .factory('newContact', function($http){
@@ -118,7 +119,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
     }
 })
 .factory('updateContact', function($http){
-    
+
     return {
         update: function(contact){
          return  $http.post(BASE_URL + '/updateContact', contact);
@@ -144,10 +145,10 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
                  console.log(response);
              })
         }
-        
+
     }*/
 .factory('rmContact', function($resource, $http){
-      
+
     /*return {
           removeC : function(contact){
               $http({
@@ -161,7 +162,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
               })
           }
       }*/
-        
+
      return $resource(BASE_URL+ '/removeContact', { email : '@contactInAdmin.email'});
 
 })
@@ -174,7 +175,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
         },
         getContact : function(){
             return contact;
-            
+
         }
     }
 })
@@ -188,7 +189,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
             return messages
         }
     }
-    
+
 })
 .factory ('TableCompenentClass', function(){
     var table = {
@@ -219,7 +220,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
                     }
                 }).then( function ( data){
                     if ( 'disabled' === data.data) {
-                        $rootScope.stateInvalid = true; 
+                        $rootScope.stateInvalid = true;
                     }
                     else if ('No' === data.data) {
                         $rootScope.LoginFormInvalid = true;
@@ -230,11 +231,11 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
                         $state.go('home');
                     }
                 }, function (err){
-                    
+
                 })
         }
     };
-})      
+})
 .factory('User', function(){
     var user = {};
     return {
@@ -244,9 +245,9 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
         getUser : function(){
             return user;
         }
-        
+
     }
-    
+
 })
 .factory('Data', function(){
     return {
@@ -259,18 +260,30 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
             })
         return d;
     }
-        
+
     }
 })
-.factory ('DestId', function (){
+.factory ('DestId', function ($rootScope){
  var destId = '', id = '', email = '';
     return {
-        setDestinationId : function(d){
-            destId = d;
+        setDestinationId : function(email, d){
+          //  destId = d;
+            $rootScope.allDestinations.push({
+              email : email,
+              apiId: d
+            });
         },
-        getDestinationId : function(){
-            return destId;
-        },
+        getDestinationId : function(email){
+          var _apiId = null;
+              angular.forEach ($rootScope.allDestinations, function(obj) {
+                    if(obj.email == email){
+                          _apiId = obj.apiId;
+                    }
+              });
+              return _apiId;
+        }
+        ,
+
         setContactId : function(d){
             id = d;
         },
@@ -283,10 +296,9 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
         getContactEmail : function(){
             return email;
         }
-        
+
     }
 })
-
 .directive('chevronDownDirective', function(){
     return {
         restrict : 'A',
@@ -295,16 +307,16 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
                element.parents('thead').addClass('table-no-border');
                element.parents('thead').siblings('tbody').addClass('table-no-border');
                element.parents('table').toggle();
-               element.parents('table').siblings('footer').toggle();     
+               element.parents('table').siblings('footer').toggle();
             })
-        }   
+        }
     }
 })
 .directive('chevronUpDirective', function(){
     return {
         restrict : 'A',
         link : function(scope, element, attrs){
-            element.click( function(){  
+            element.click( function(){
                 element.parents('html').animate({ scrollTop: $(document).height()+90-$(window).height() });
                 element.parents('body').animate({ scrollTop: $(document).height()+90-$(window).height() });
                 element.parents('footer').toggle();
@@ -328,27 +340,33 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
                 if( e.keyCode == 13){
                     var message = element.val();
                     if( message.trim() != ''){
-                        sendIMessage(DestId.getDestinationId() , $rootScope.currentUser.id, message);
-                        sendMessageFactory.send(DestId.getContactEmail(),$rootScope.currentUser.email,message);
-                         element.parent().parent().parent().siblings('tbody').append('<tr>'+
-                        '<td>'+
-                        '<div class="" style="margin-left:0px;">'+
-                                        '<p class="bg-danger left" style="margin-bottom : 0;">'+message+ '&nbsp;'+ '<span class="pull-right small  text-muted">'+ getHeure ( new Date ())+'</span>'+
-                                        '</p>'+
-                                        '</div>'+
-                                        '</td>'+
-                                        '</tr>');
-                    }
+                        var email = attrs['email'];
+
+                        var apiId = DestId.getDestinationId(email);
+
+                        sendMessageFactory.send(email,$rootScope.currentUser.email,message);
+                        element.parent().parent().parent().siblings('tbody').append('<tr>'+
+                          '<td>'+
+                          '<div class="" style="margin-left:0px;">'+
+                                    '<p class="bg-danger left" style="margin-bottom : 0;">'+message+ '&nbsp;'+ '<span class="pull-right small  text-muted">'+ getHeure ( new Date ())+'</span>'+
+                                    '</p>'+
+                                    '</div>'+
+                                    '</td>'+
+                                    '</tr>');
+                        if(apiId){
+                            sendIMessage(apiId , $rootScope.currentUser.id, message);
+                        }
+                      }
                     element.parent().parent().parent().siblings('tbody').animate({
                             scrollTop: element.parent().parent().parent().siblings('tbody')[0].scrollHeight},2000);
                     element.val('');
-                            
+
                     }
             })
-            
+
         }
     }
-    
+
 })
 .directive('leftDirective', function($filter){
     return {
@@ -359,7 +377,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
             scope.time =attrs.time;
             element.parent('div').parent('td').parent('tr').parent('tbody').animate({
                 scrollTop: element.parent('div').parent('td').parent('tr').parent('tbody')[0].scrollHeight},200)
-            }    
+            }
         }
 })
 .directive('rightDirective', function(){
@@ -371,7 +389,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
             scope.time = attrs.time;
             element.parent('div').parent('td').parent('tr').parent('tbody').animate({
                 scrollTop: element.parent('div').parent('td').parent('tr').parent('tbody')[0].scrollHeight},200)
-            }        
+            }
         }
 })
 .directive( 'avatarDirective' , function(){
@@ -381,9 +399,9 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
         link : function (scope, element, attrs) {
             attrs.class = "img-circle";
             scope.initials = attrs.initials;
-            scope.style = "border : 2px solid " + attrs.bgborder+ ";"+ "width : 100%; height = 100%; background-color : #663399;"; 
+            scope.style = "border : 2px solid " + attrs.bgborder+ ";"+ "width : 100%; height = 100%; background-color : #663399;";
         }
-    }  
+    }
 })
 .directive ( 'convDirective', function(){
     return  {
@@ -392,7 +410,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
             element.data('clicked', true);
         }
     }
-    
+
 })
 .directive ('dragDirective', function(){
     return {
@@ -403,7 +421,7 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
     }
 })
 .directive ('overDirective', function(){
-    
+
     return {
         restrict : 'A',
         link : function( scope, element, attrs){
@@ -415,16 +433,15 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
                  element.parent('td').parent('tr').parent('tbody').parent('table').parent('div').animate({
                      scrollTop : element.parent('td').parent('tr').parent('tbody').parent('table').parent('div')[0].scrollHeight
                  }, 200);
-                
-               
+
+
             })
         }
     }
 })
 .filter('dateFilter', function(){
     return function(date){
-        return $filter ('date')(date);
-    
+        return new Date(date);
+
     }
-})
-;
+});

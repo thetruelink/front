@@ -1,14 +1,14 @@
 <style type="text/css">
     li {
         list-style: none;
-    }  
+    }
     .left, .rigth {
         border-radius: 5px;
         font-size: 0.8em;
     }
-    
-  #tableChat th, #tableChat td, #tableChat tr { 
-     border: none !important; 
+
+  #tableChat th, #tableChat td, #tableChat tr {
+     border: none !important;
  }
     tr{
         margin-bottom: 0;
@@ -58,7 +58,7 @@
               <div class="row">
                       <a href="#" class="col-md-1" style="text-decoration : none;" title="Ajouter d'autres participants à la discussion"><i class="icon-group"></i></a>
               </div>
-              
+
               <div class="row">
                   <div class="col-md-7 col-md-offset-4">
                     <img src="img/boss.jpg" class="img-circle" height="35px">&nbsp;
@@ -86,29 +86,29 @@
                 <td class="text-center col-md-offset-4 col-md-2">Hier</td>
             </tr>
             <tr ng-repeat  = "m in messages">
-                <td ng-if="m.user.email == contact.email">
+                <td ng-if="m.user.email != contact.email">
                      <div style="margin-left:0px;">
-                         <left-directive message="{{m.texte}}" time="{{m.date.timestamp | date : 'hh:mm '}}"></left-directive>
+                         <left-directive message="{{m.texte}}" time="{{m.date.timestamp | dateFilter}}"></left-directive>
                      </div>
                 </td>
-                <td ng-if ="m.user.email !== contact.email">
+                <td ng-if ="m.user.contacts[0].email != contact.email">
                    <div style="margin-left : 10px;">
-                      <right-directive message="{{m.texte}}" time="{{m.date.timestamp | date : 'hh:mm '}}"></right-directive>
-                    
+                      <right-directive message="{{m.texte}}" time="{{m.date.timestamp | dateFilter}}"></right-directive>
+
                     </div>
-                
+
                 </td>
             </tr>
         </tbody>
         <tfoot id="tfoot" style="background-color : #b2dfdb;">
             <tr>
-                <td><textarea id="{{contact.id}}" class="form-control" cols="5" rows="2" text-directive placeholder="Tapez votre message ici"></textarea></td         
+                <td><textarea id="{{contact.id}}" data-email="{{contact.email}}" data-api = "{{contact.email}}" class="form-control" cols="5" rows="2" text-directive placeholder="Tapez votre message ici"></textarea></td
             </tr>
             <tr>
                 <td>
                  <label class="btn btn-file text-primary"><i class="icon-file"></i> <input type="file" style="display: none;" title="Envoyer un fichier"></label>&nbsp;
                     <a href="#" title="Partager votre position"><i class="icon-map-marker text-primary"></i></a>
-                </td>       
+                </td>
            </tr>
         </tfoot>
     </table>
@@ -121,10 +121,9 @@
                  </p>
                      <a href="#" chevron-up-directive style="text-decoration : none;">
                     <small class="text-primary">{{contact.prenom}}&nbsp;{{contact.nom}} </small>&nbsp;&nbsp;<i class="icon-chevron-up"></i></a>
-                
+
              </div>
         </div>
     </div>
     </footer>
 </div>
-  

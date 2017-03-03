@@ -12,7 +12,7 @@
                 position: relative;
             }
             .right-inner-addon input {
-                padding-right: 40px;   
+                padding-right: 40px;
             }
             .transition {
                   width: 100px;
@@ -30,24 +30,24 @@
                 left: 0;
                 margin-bottom: 0px;
             }
-            
+
             ::-webkit-scrollbar {
                 width: 5px;
-                
+
             }
             ::-webkit-scrollbar-track {
-                -webkit-box-shadow: inset 0 0 6px gray; 
+                -webkit-box-shadow: inset 0 0 6px gray;
                 border-radius: 10px;
             }
             ::-webkit-scrollbar-thumb {
                 border-radius: 5px;
-                background: gray; 
-                -webkit-box-shadow: inset 0 0 6px gray; 
+                background: gray;
+                -webkit-box-shadow: inset 0 0 6px gray;
             }
             ::-webkit-scrollbar-thumb:horizontal {
-              
+
             }
-          
+
             ::-webkit-scrollbar-track:horizontal {
             /*    border-width: 2px 0 0*/
             }
@@ -67,7 +67,7 @@
            <div class="container-fluid">
                </div>
                <div class="collapse navbar-collapse">
-                   <ul class="nav navbar-nav navbar-right"> 
+                   <ul class="nav navbar-nav navbar-right">
                        <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span ng-class="statusClass" ng-model= "status">{{user.status}}</span>
                                 <i class="icon-bell"></i></a>
@@ -75,12 +75,12 @@
                                 <li><a href="#" ng-click = "changeStatus ('Disponible', 'text-success', nom)"><span class="text-success">Disponbile</span></a></li>
                                 <li><a href="#" ng-click = "changeStatus ('Occupé(e)', 'text-danger', nom)"><span class="text-danger">Occupé(e)</span></a></li>
                                 <li><a href="#" ng-click = "changeStatus ('Sorti(e)', 'text-muted', nom)"><span class="text-muted">Sorti(e)</span></a></a></li>
-                                <li><a href="#" ng-click = "changeStatus ('En réunion', 'text-warning', nom)"><span class="text-warning">En réunion</span></a></a></li>                    
+                                <li><a href="#" ng-click = "changeStatus ('En réunion', 'text-warning', nom)"><span class="text-warning">En réunion</span></a></a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <img class="img-circle" 
+                                <img class="img-circle"
                                      src="{{avatar}}" height="45px" alt="{{user.prenom[0]}}{{user.nom[0]}}">
                                 <span class="text-primary" ng-model ="nom"> {{user.prenom}}&nbsp;{{user.nom}}</span>
                                 <span class="caret primary"></span></a>
@@ -99,20 +99,20 @@
         </nav>
         <div class="row">
         <div class="col-md-6" style=" position : fixed; height : 800px;">
-           <legend><i class="icon-user text-primary">&nbsp;</i>Contacts</legend>
+           <legend><i class="icon-user text-primary">&nbsp;</i>Liste des contacts</legend>
              <div style="display :inline-block;";>
                 <form class="navbar-form navbar-right right-inner-addon col-xs-2" role="search">
                     <i class="icon-search" style="margin-left : 10px;"></i>
                     <input type="text" class="form-control input-sm" placeholder="Rechercher un contact" ng-model ="searchText" style="">
                 </form>
-            </div> 
+            </div>
             <div class="table-responsive" style="overflow : auto; height : 450px;">
                <table class="table table-striped table-hover">
                  <!--  <caption class=""><h4><i class="icon-group text-primary">&nbsp;</i>Tous les contacts</h4></caption> -->
                   <thead>
                       <tr>
-                         <th>Nom</th>
-                         <th>Dernière conversation</th>
+                         <th></th>
+                         <th></th>
                           <th></th>
                       </tr>
                    </thead>
@@ -121,10 +121,10 @@
                             >
                           <td class="text-primary" ng-switch="contact.status">
                               <a ui-sref="home" style="text-decoration : none;" title="" over-directive>
-                              <i class="icon-ok sign img-circle text-success"  ng-switch-when="Disponible" ></i>    
-                              <i class="icon-minus-sign  text-danger" ng-switch-when="Occupé(e)"></i>  
-                              <i class="icon-time  text-muted" ng-switch-when="Sorti(e)"></i>  
-                              <i class="icon-repeat  text-warning" ng-switch-when="En réunion"></i> &nbsp;    
+                              <i class="icon-ok sign img-circle text-success"  ng-switch-when="Disponible" ></i>
+                              <i class="icon-minus-sign  text-danger" ng-switch-when="Occupé(e)"></i>
+                              <i class="icon-time  text-muted" ng-switch-when="Sorti(e)"></i>
+                              <i class="icon-repeat  text-warning" ng-switch-when="En réunion"></i> &nbsp;
                                 <span style="">{{contact.prenom}}</span>&nbsp;
                                 <span style="font-weight : bold">{{contact.nom}}</span>&nbsp;
                              </a>
@@ -141,14 +141,14 @@
                                             <td>{{contact.prenom}}</td>
                                             <td>{{contact.nom}}</td>
                                             <td>{{contact.email}}</td>
-                                            <td>SGBS Dakar, Point E</td>
+                                            <td>{{contact.localisation}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                           </td>
                           <td class="text-primary">Date</td>
                           <td><a ui-sref="home" class="conversation show" ng-click ="loadConversation(contact)" title="Commencer une discussion" conv-directive><i class="icon-comment" id="{{contact.id}}"></i></a>
-                          </td>        
+                          </td>
                        </tr>
                      </tbody>
                 </table>
@@ -166,16 +166,16 @@
                     <tbody>
                         <tr ng-repeat="favory in favorites track by $index">
                             <td ng-switch="favory.status">
-                              <i class="icon-ok sign img-circle text-success"  ng-switch-when="Disponible" ></i>    
-                              <i class="icon-minus-sign  text-danger" ng-switch-when="Occupé(e)"></i>  
-                              <i class="icon-time  text-muted" ng-switch-when="Sorti(e)"></i>  
-                              <i class="icon-repeat  text-warning" ng-switch-when="En réunion"></i> &nbsp;  
+                              <i class="icon-ok sign img-circle text-success"  ng-switch-when="Disponible" ></i>
+                              <i class="icon-minus-sign  text-danger" ng-switch-when="Occupé(e)"></i>
+                              <i class="icon-time  text-muted" ng-switch-when="Sorti(e)"></i>
+                              <i class="icon-repeat  text-warning" ng-switch-when="En réunion"></i> &nbsp;
                                 <small>
                             {{favory.prenom}}&nbsp;{{favory.nom}}&nbsp;</small>
                             <a href="#" title="Retirer des favoris" ng-click ="deleteToFavorites(favory)">
                                 <small><i class="icon-check-minus"></i></small></a></td>
-                            <td><small>Date</small></td>
-                          <td><small><a href="#" title="Commencer une discussion" 
+                            <td><small>Notre derniere conversation</small></td>
+                          <td><small><a href="#" title="Commencer une discussion"
                                         ng-click ="loadConversation(favory)"><i class="icon-comment"></i></a></small></td>
                         </tr>
                     </tbody>

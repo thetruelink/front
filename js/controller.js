@@ -1,18 +1,20 @@
-var BASE_URL = 'http://192.168.1.23:81/api/web/app.php';
+var BASE_URL = 'http://localhost:8000';
 var session = '';
 app.controller('appCtrl', function(){
-    
+
 });
 
 app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, removeFavoryFactory, StatusFactory, Favorites, Data, User, DestId, sendMessageFactory, conversation, $rootScope, messagesRecov){
-    
+
     $scope.user =   User.getUser();
     $scope.user.status = 'Disponible';
     $scope.searchText = '';
     $scope.allContacts = [];
-    
+
+    $rootScope.allDestinations = [];
+
     $rootScope.currentUser = $scope.user;
-   
+
     $.ajax({
         type : 'POST',
         data : {
@@ -25,7 +27,7 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
     }).fail( function(err){
         //console.error( err);
     });
-    
+
     Contacts.then(function ( data){
         $scope.allContacts = data.data;
     });
@@ -46,9 +48,9 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
                 'show' : false
             };
             $scope.tabTemplate.push(c);
-        });  
+        });
     });
-    
+
     $rootScope.getAttributeShow = function(contact){
         var d = false;
         angular.forEach($scope.tabTemplate, function(c){
@@ -58,37 +60,36 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
         });
         return d;
     };
-    
+
     $rootScope.setAttributeShow = function(contact, s){
         angular.forEach($scope.tabTemplate, function(c){
             if( c.contact.id == contact.id){
                 $scope.tabTemplate[ $scope.tabTemplate.indexOf(c)].show = s;
             }
-        });   
+        });
     }
-  
-    
-    $scope.loadConversation = function(contact){ 
-        
-        
+
+
+    $scope.loadConversation = function(contact){
         /* Récupérer l'apiId à chaque click pour débuter une nouvelle conversation
         Parce qu'à un moment donné, l'apiId du destinataire a changé !
         */
+
         $.ajax({
             type : 'POST',
             data : {
                 email:  contact.email
             },
             url :  BASE_URL+ '/getApiId'
-        }).done( function (data) {
-            DestId.setDestinationId(data);
+        }).done(function (data) {
+            DestId.setDestinationId(contact.email, data);
             DestId.setContactId(contact.id);
-            DestId.setContactEmail(contact.email);
-        } ).fail( function (err) {
-            
+            //DestId.setContactEmail(contact.email);
+        }).fail( function (err) {
+
            // console.log( err);
         });
-        
+
         $http({
             method : 'POST',
             url : BASE_URL+'/getMessages',
@@ -96,17 +97,17 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
                 s_email : $rootScope.currentUser.email,
                 d_email : contact.email
             }
-            
+
         }).then (function (data){
                 $scope.template= 'views/newChat.html#chatBoxId';
                 $scope.setAttributeShow( contact, true);
                 conversation.setConversation(contact);
                 messagesRecov.setMessage(data.data);
         }, function (err){});
-         
+
     }
     $scope.$on('$includeContentLoaded', function(){
-        
+
         $('html, body').animate({ scrollTop: $(document).height()-$(window).height() });
     });
 
@@ -118,46 +119,46 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
     }
     $scope.getStatus = function(index){
 
-        return conversations.findConversation(index).statut;  
+        return conversations.findConversation(index).statut;
     }
    $scope.favorites = [];
-    
+
     Favorites.getFavorites($rootScope.currentUser.email).then(function( data){
         $scope.favorites = data.data;
     });
-    
+
     /*
     setTimeout( function(){
-        Favorites.then( function(data){ 
+        Favorites.then( function(data){
         $scope.favorites = data.data;
     });
     }, 1500);
 */
-    
+
     $scope.checkFavory = function(contact){
         var c=0;
         angular.forEach($scope.favorites, function(f){
             if( f.id === contact.id){
                 c= 1;
-            }            
+            }
         })
         return c;
     }
-    
+
     /* Ajout d'un contact aux favoris*/
-    
+
     $scope.addToFavorites = function(contact){
         if( $scope.checkFavory(contact) == 0){
             addContactFactory.add(contact)
                 .then(function(data){
                      if(data.data == 'ok'){
-                         $scope.favorites.push(contact); 
+                         $scope.favorites.push(contact);
                      }
-            });        
+            });
         }
     }
     /*Suppression d'un contact des favoris*/
-    
+
     $scope.deleteToFavorites = function(favory){
          removeFavoryFactory.remove(favory)
              .then(function(data){
@@ -167,16 +168,20 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
          });
     }
 });
-app.controller('contactCtrl', function($scope, conversation, messagesRecov, Contact, $state , updateContact, rmContact, Data, $http, $rootScope){  
-    $scope.contact = conversation.getConversation();
-    $scope.messages = messagesRecov.getMessage();
-    $scope.contactInAdmin  = Contact.getContact();
-    $scope.gotoAdminHome = function(){
-        $state.go('admin');   
-    };
-    $scope.update = function(){
-         //updateContact.updateContact($scope.contactInAdmin); 
-        
+app.controller('contactCtrl', function($scope, conversation, messagesRecov, Contact, $state , updateContact, rmContact, Data, $http, $rootScope, DestId){
+
+  $scope.contact = conversation.getConversation();
+  $scope.messages = messagesRecov.getMessage();
+
+  $scope.contactInAdmin  = Contact.getContact();
+
+
+  $scope.gotoAdminHome = function(){
+        $state.go('admin');
+  };
+  $scope.update = function(){
+         //updateContact.updateContact($scope.contactInAdmin);
+
         updateContact.update($scope.contactInAdmin)
             .then(function(data){
              if(data.data == 'existe'){
@@ -184,7 +189,7 @@ app.controller('contactCtrl', function($scope, conversation, messagesRecov, Cont
              }
             else{
                 $scope.contactSaved = true
-            }  
+            }
         });
        // $state.go('admin');
     };
@@ -194,11 +199,11 @@ app.controller('contactCtrl', function($scope, conversation, messagesRecov, Cont
        c.$save({email : $scope.contactInAdmin.email}).then(function(data){ console.log(data)});
     }
     $scope.disableForm = true;
-    
+
     $scope.admin = function(){
         $scope.disableForm = false;
     }
-    
+
     $scope.changeState = function(){
         $http.post(BASE_URL + '/changeState', {email: $scope.contactInAdmin.email, state: $scope.contactInAdmin.state})
            .then( function(data){
@@ -208,10 +213,10 @@ app.controller('contactCtrl', function($scope, conversation, messagesRecov, Cont
         }, function(err){
             console.log(err);
         });
-        
+
     }
 
- 
+
 });
 app.controller('loginCtrl', function($scope, AuthFactory, Data){
     $scope.title ="trueLink";
@@ -223,9 +228,9 @@ app.controller('loginCtrl', function($scope, AuthFactory, Data){
         if( e == true){
             AuthFactory.authenticate ($scope.credentials);
         }
-        
+
     }
-    
+
 });
 app.controller('adminCtrl', function($scope, Contacts, $state, Contact, newContact, ContactsAdmin){
     $scope.searchText = '';
@@ -233,7 +238,7 @@ app.controller('adminCtrl', function($scope, Contacts, $state, Contact, newConta
         console.log(data.data);
         $scope.allContacts = data.data;
     });
-    
+
     $scope.setContact = function(c){
         Contact.setContact(c);
        // $state.go('contact');
@@ -251,8 +256,8 @@ app.controller('newContactCtrl', function(newContact, $scope, Data, $state){
     $scope.saveContact = function(){
          newContact.save($scope.contact)
         .then( function(data){
-             $scope.registrerOk = data.data === 'ok' ? true : false;  
-             $scope.exist = data.data === 'existe' ? true : false;  
+             $scope.registrerOk = data.data === 'ok' ? true : false;
+             $scope.exist = data.data === 'existe' ? true : false;
         }, function(err){
              console.log(err);
          });
