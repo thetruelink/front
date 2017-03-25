@@ -1,4 +1,5 @@
-var BASE_URL = 'http://localhost:8000';
+//var BASE_URL = 'http://localhost:8000/truelink';
+var BASE_URL = 'http://192.168.1.23:8000/truelink';
 var session = '';
 app.controller('appCtrl', function(){
 
@@ -17,12 +18,10 @@ app.controller('homeCtrl', function($scope, $http, Contacts, addContactFactory, 
 
     $.ajax({
         type : 'POST',
-        data : {
-            apiId :apiCC.session.apiCCId,
-            email    :  $scope.user.email
-        },
+        data : { apiId : apiCC.session.apiCCId,     email : $scope.user.email },
+        headers : {'Authorization': 'Bearer '+ window.localStorage.getItem('api-token')}, 
         url : BASE_URL+ '/changeApiId'
-    }).done( function(data){
+    }).done(function(data){
         //console.log( data);
     }).fail( function(err){
         //console.error( err);

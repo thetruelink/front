@@ -1,6 +1,7 @@
 'use strict';
-//var BASE_URL = 'http://localhost:81/api/web/app.php';
-var BASE_URL = 'http://localhost:8000';
+
+//var BASE_URL = 'http://localhost:8000/truelink';
+var BASE_URL = 'http://192.168.1.23:8000/truelink';
 
 var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngMaterial'])
 .config( function ($stateProvider, $urlRouterProvider, $mdThemingProvider){
@@ -211,24 +212,44 @@ var app = angular.module('linkApp', ['ngResource', 'ui.router', 'ngAnimate','ngM
 .factory('AuthFactory', function($http, User, $state, $rootScope){
     return {
         authenticate : function(credentials){
-                $http({
+              $http({
                     method : 'POST',
                     url : BASE_URL+'/crediantialCheck',
                     data : {
-                        username : credentials.email,
+                        email : credentials.email,
                         password : credentials.password
                     }
                 }).then( function ( data){
-                    if ( 'disabled' === data.data) {
+                    if ('disabled' === data.data) {
                         $rootScope.stateInvalid = true;
                     }
                     else if ('No' === data.data) {
                         $rootScope.LoginFormInvalid = true;
                     }
                     else{
-                        User.setUser(data.data);
-                        $rootScope.id = User.getUser().id;
-                        $state.go('home');
+                        //var token data.token ;
+                          window.localStorage.setItem('api-token', data.data.token);
+                          $http.defaults.headers.common.Authorization = 'Bearer ' + window.localStorage.getItem('api-token');
+                          $http({
+                                method : 'POST',
+                                url : BASE_URL + '/getContact',
+                                data : {
+                                    email : credentials.email
+                                },
+                               // headers : {
+                                 //   'Authorization' : 'Bearer '+ window.localStorage.getItem('api-token')
+                                //}         
+                            }).then(function(data){
+                                  // The token is valid         
+                                    User.setUser(data.data);
+                                    $rootScope.id = User.getUser().id;
+                                    $state.go('home');
+                                }, function( data){
+                                  //The token is invalid
+                                    if('USER_NOT_FOUND' == data.data){
+                                        $rootScope.userNotFound = true;
+                                    }
+                                })
                     }
                 }, function (err){
 
