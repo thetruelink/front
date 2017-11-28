@@ -1,0 +1,54 @@
+li {
+    list-style: none;
+}
+.left, .rigth {
+    border-radius: 5px;
+    font-size: 0.8em;
+}
+
+#tableChat th, #tableChat td, #tableChat tr {
+ border: none !important;
+}
+tr{
+    margin-bottom: 0;
+}
+tbody {
+    height: 100px;
+    overflow-y: auto;
+}
+.date {
+    text-decoration:underline;
+}
+.h-divider{
+margin-top:5px;
+margin-bottom:5px;
+height:0.1em;
+width:100%;
+border-top:0.1em;
+}
+.table-no-border{
+    border: none ! important;
+}
+.hiddenCompenent {
+    visibility: hidden;
+}
+.visibleCompenent {
+    visibility: visible;
+}
+  p{
+    display: inline-block;
+    word-break:normal;
+    min-width:1px;
+    max-width:200px;
+    padding: 4px;
+}
+#msgBox{
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 140px;
+    max-height: 200px;
+    display: block;
+}
+#thead{
+    border: 1px solid #dddddd;
+}

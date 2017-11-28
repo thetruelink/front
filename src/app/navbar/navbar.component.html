@@ -1,0 +1,39 @@
+<div>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+          <div class="status-menu">
+            <button mat-button [matMenuTriggerFor]="statusmenu">
+              <span [ngClass]="statusClass">{{model.status ? model.status : statusDropDown[0].name }}</span>
+            </button>
+            <mat-menu #statusmenu="matMenu">
+              <button *ngFor="let status of statusDropDown" 
+                      (click) = "changeStatus (status.name, status.class)"
+                      mat-menu-item [ngSwitch]="status.name"><span>
+                          <i class="icon-ok sign img-circle text-success"  *ngSwitchCase=" 'Disponible' " 
+                          [ngClass]="status.class"></i>
+                          <i class="icon-minus-sign  text-danger" *ngSwitchCase=" 'Occupé(e)' "
+                          [ngClass]="status.class"></i>
+                          <i class="icon-time  text-muted" *ngSwitchCase=" 'Sorti(e)' "
+                          [ngClass]="status.class"></i>
+                          <i class="icon-repeat  text-warning" *ngSwitchCase=" 'En réunion' "
+                          [ngClass]="status.class"></i>
+                        
+                        {{status.name}}</span>
+              </button>
+            </mat-menu>
+            <button mat-button [matMenuTriggerFor]="seetingsmenu">
+                  <img class="img-circle"
+                      src="{{model.avatar}}" height="45px" alt="{{model.prenom[0]}}{{model.nom[0]}}">
+                      {{model.prenom}}&nbsp;{{model.nom}}</button>
+                  <mat-menu #seetingsmenu="matMenu">
+                    <a [routerLink]="['seetings']" style="text-decoration:none;">
+                        <button mat-menu-item><span class="">
+                                <i class="icon-wrench">&nbsp;&nbsp;</i>Paramètres</span>
+                        </button></a>
+                        <button mat-menu-item>
+                          <i class="icon-power-off">&nbsp;&nbsp;</i>Déconnexion</button>
+                  </mat-menu>
+            </div>
+      </div>
+    </nav>
+    </div>

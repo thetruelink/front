@@ -1,0 +1,97 @@
+<!--
+<div style="width: 500px;">
+  <ng-table [config]="config"
+    
+    [rows]="contacts" [columns]="columns">
+  </ng-table>
+</div>
+-->
+
+<div class="row">
+    <div class="col-md-6" style=" position : fixed; height : 800px;">
+        <legend><i class="icon-user text-primary">&nbsp;</i>Liste des contacts</legend>
+        <div class="table-responsive" style="overflow : auto; height : 450px;">
+            <table class="table table-striped table-hover">
+              <thead>
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+              </thead>
+              <tbody>
+                    <tr *ngFor="let contact of contacts">
+                      <td style="width: 100%">
+                        <a href="#" [ngSwitch] = "contact.status" class="contact-line" appOver>
+                            <i class="icon-ok sign img-circle text-success"  *ngSwitchCase=" 'Disponible' " ></i>
+                            <i class="icon-minus-sign  text-danger" *ngSwitchCase=" 'Occupé(e)' "></i>
+                            <i class="icon-time  text-muted" *ngSwitchCase=" 'Sorti(e)' "></i>
+                            <i class="icon-repeat  text-warning" *ngSwitchCase=" 'En réunion' "></i> &nbsp;
+                          <span>{{contact.prenom}}&nbsp; {{contact.nom}}</span>
+                        </a>
+                        <table class="table text-danger" style="display : none;">
+                            <thead>
+                                 <th>Prénom</th>
+                                <th>Nom</th>
+                                <th>Adresse électronique</th>
+                                <th>Localisation</th>
+                             </thead>
+                             <tbody>
+                                 <tr>
+                                     <td>{{contact.prenom}}</td>
+                                     <td>{{contact.nom}}</td>
+                                     <td>{{contact.email}}</td>
+                                     <td>{{contact.localisation}}</td>
+                                 </tr>
+                             </tbody>
+                         </table>
+                        <a href="#" title="Ajouter aux favoris" 
+                            (click) ="addToFavorites(contact)"><i class="icon-expand-alt"></i></a>
+                      </td>
+                      <td class="text-primary">Date</td>
+                      <td><a href="#" class="conversation show" (click) ="loadConversation(contact)" title="Commencer une discussion" conv-directive><i class="icon-comment" id="{{contact.id}}"></i></a>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  </div>
+                </div>
+  </div>
+  <div class="col-md-4 pull-right">
+      <div class="table-reponsive" style="overflow : auto; height : 250px;">
+          <table class="table table-striped table-hover">
+              <caption ><h4><i class="icon-star text-primary">&nbsp;</i>Favoris&nbsp; ({{favorites.length}})</h4></caption>
+              <thead>
+                  <th style="width : 200px;">Nom</th>
+                  <th>Historique</th>
+                  <th></th>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let favory of favorites">
+                      <td [ngSwitch]="favory.status">
+                        <i class="icon-ok sign img-circle text-success"  *ngSwitchCase="'Disponible'" ></i>
+                        <i class="icon-minus-sign  text-danger" *ngSwitchCase="'Occupé(e)'"></i>
+                        <i class="icon-time  text-muted" *ngSwitchCase="'Sorti(e)'"></i>
+                        <i class="icon-repeat  text-warning" *ngSwitchCase="'En réunion'"></i> &nbsp;
+                          <small>
+                      {{favory.prenom}}&nbsp;{{favory.nom}}&nbsp;</small>
+                      <a href="#" title="Retirer des favoris" (click) ="deleteToFavorites(favory)">
+                          <small><i class="icon-check-minus"></i></small></a></td>
+                      <td><small>Notre derniere conversation</small></td>
+                    <td><small><a href="#" title="Commencer une discussion"
+                                  (click) ="loadConversation(favory)"><i class="icon-comment"></i></a></small></td>
+                  </tr>
+              </tbody>
+          </table>
+    </div>
+  </div>
+  <div class="row">
+      <div *ngFor="let contact of contacts" style="z-index : 10;" class="col-md-4">
+          <ng-container *ngIf="startNewConversation(contact)">
+             <app-chat [contact]="contact"></app-chat>
+          </ng-container>   
+      
+    </div>
+
+  </div>
+  

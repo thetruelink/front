@@ -1,0 +1,13 @@
+#header-container{
+    top:0;
+}
+#login-register-action{
+    right: 20px;
+    position: absolute;
+ 
+}
+.toolbar-button{
+    text-decoration: none;
+    font-size: 14px;
+    margin-left: 20px;
+}

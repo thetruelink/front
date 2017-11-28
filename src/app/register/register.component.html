@@ -1,0 +1,45 @@
+<form [formGroup]="registerForm">
+  <div>
+      <mat-form-field class="input-field">
+          <input matInput placeholder="First Name" 
+                [formControl]="firstName" 
+                name="first_name" 
+                type="text">
+      </mat-form-field>
+  </div>
+  <div>
+      <mat-form-field class="input-field">
+          <input matInput placeholder="Last Name" 
+                [formControl]="lastName" 
+                name="last_name" 
+                type="text">
+        </mat-form-field>
+  </div>
+  <div>
+      <mat-form-field class="input-field">
+          <input matInput placeholder="Email" 
+                [formControl]="email" 
+                name="email" 
+                type="email">
+        </mat-form-field>
+  </div>
+  <div>
+      <mat-form-field class="input-field">
+          <input matInput placeholder="Password" 
+                [formControl]="password" 
+                name="password" 
+                type="password">
+        </mat-form-field>
+  </div>
+  <div>
+      <mat-form-field class="input-field">
+          <input matInput placeholder="Confirmation" 
+                [formControl]="confirmation" 
+                name="confirmation" 
+                type="password">
+        </mat-form-field>
+  </div>
+  <div>
+    <button mat-button color="primary" type="submit">Inscription</button>
+  </div>
+</form>

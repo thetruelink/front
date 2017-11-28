@@ -1,0 +1,37 @@
+<div class="panel panel-success" style="margin-top : 50px;">
+    <div class="panel-heading">
+       <h4><i class="icon-wrench">&nbsp;</i>Seetings</h4>
+     </div>
+     <div class="panel-body">
+          <mat-form-field class="input-field">
+                <input matInput placeholder="Nom" 
+                [(ngModel)]="user.nom" type="text" [disabled]="true">
+          </mat-form-field>
+          <mat-form-field class="input-field">
+              <input matInput placeholder="Prénom" 
+              [(ngModel)]="user.prenom" type="text" [disabled]="true">
+        </mat-form-field>
+        <mat-form-field class="input-field">
+            <input matInput placeholder="Email" 
+            [(ngModel)]="user.email" type="email" [disabled]="true">
+      </mat-form-field>
+      <div>
+          <a style="text-decoration:none; cursor:pointer" 
+          (click)="changePasswordSeetings = !changePasswordSeetings">Change Password</a>  
+      </div>  
+      <div *ngIf="changePasswordSeetings">
+          <mat-form-field class="input-field">
+              <input matInput placeholder="Mot de passe actuel" 
+              [(ngModel)]="pwd.password" type="password">
+        </mat-form-field>
+        <mat-form-field class="input-field">
+            <input matInput placeholder="Nouveau mot de passe" 
+            [(ngModel)]="pwd._password" type="password">
+      </mat-form-field>
+      <button mat-button color="primary" (click)="changePasswordAction()" appPressed>Enregister</button>
+      <button mat-button color="primary" id="pwd-cancel-btn"  
+              appConfirm appPressed>Annuler</button>
+            
+      </div>      
+      
+</div>
